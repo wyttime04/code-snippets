@@ -189,6 +189,7 @@ case actions[`GET_ACTION_NAME_FAIL`]:
     return {
         ...state,
         errmsg: action.errmsg,
+        data: action.data || init.data,
         isFetching: false,
     }
 ~~~
@@ -216,7 +217,7 @@ case actions[`POST_${ACTION}_FAIL`]:
     return {
         ...state,
         errmsg: action.errmsg,
-        data: action.data,
+        data: action.data || init.data,
         isFetching: false,
     }
 ~~~
