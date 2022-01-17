@@ -1,0 +1,174 @@
+{
+	// Place your art_frontend 工作區 snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"API Action Type": {
+		"scope": "javascript,typescript",
+		"prefix": "apiaction",
+		"body": [
+			"export const ${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/} = '${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}'",
+			"/**",
+			" * ${5:desc}",
+			" * @param {${6:string}} ${7:param1} ${8:參數}",
+			" */",
+			"export const ${1:get}_${2:action_name} = data => action(${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}, data)",
+			"",
+			"export const ${1:get}_${2:action_name}_succ = data => action(${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}_SUCC, data)",
+			"export const ${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}_SUCC = '${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}_SUCC'",
+			"",
+			"export const ${1:get}_${2:action_name}_fail = data => action(${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}_FAIL, data)",
+			"export const ${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}_FAIL = '${1/(.*)/${1:/upcase}/}_${2/(.*)/${1:/upcase}/}_FAIL'",
+			""
+		],
+		"description": "Define API Action Type"
+	},
+	"Import lib/api": {
+		"scope": "javascript,typescript",
+		"prefix": "imapi",
+		"body": [
+			"import { take, call, put, select } from 'redux-saga/effects'",
+			"import * as actions from '${RELATIVE_FILEPATH/(src\\\\app\\\\sagas)*\\\\[0-9a-zA-Z\\.]*/..\\\//gi}actions'",
+			"import api from '${RELATIVE_FILEPATH/(src\\\\app\\\\sagas)*\\\\[0-9a-zA-Z\\.]*/..\\\//gi}lib/api'",
+			"$0"
+		],
+		"description": "Import api from lib"
+	},
+	"API Functino": {
+		"scope": "javascript,typescript",
+		"prefix": "apifunction",
+		"body": [
+			"/**",
+			" * ${1:desc}",
+			" * @param {${5:string}} ${6:param1} ${7:參數}",
+			" */",
+			"export function ${2:fn_name}({type, ...data}) {",
+			"\treturn api({",
+			"\t\tcmd: `${3:User/Login}`,",
+			"\t\tmethod: '${4:GET}',",
+			"\t\tdata",
+			"\t})",
+			"}",
+			"$0"
+		],
+		"description": "Create API function"
+	},
+	"API Reducer Case": {
+		"scope": "javascript,typescript",
+		"prefix": "apirdcase",
+		"body": [
+            "// ${1:GET}_${2:ACTION_NAME}",
+            "case actions[`${1:GET}_${2:ACTION_NAME}`]:",
+            "\treturn {",
+            "\t\t...state,",
+			"\t\terrmsg: '',",
+            "\t\tisFetching: true,",
+            "\t}",
+            "case actions[`${1:GET}_${2:ACTION_NAME}_SUCC`]:",
+            "\treturn {",
+            "\t\t...state,",
+            "\t\tdata: action.data,",
+            "\t\tisFetching: false,",
+            "\t}",
+            "case actions[`${1:GET}_${2:ACTION_NAME}_FAIL`]:",
+            "\treturn {",
+            "\t\t...state,",
+            "\t\terrmsg: action.errmsg,",
+            "\t\tdata: action.data || init.data,",
+            "\t\tisFetching: false,",
+            "\t}",
+            "$0"
+		],
+		"description": "Define API Reducer Case"
+	},
+	"API Reducer Case (MultiMethod)": {
+		"scope": "javascript,typescript",
+		"prefix": "apirdmucase",
+		"body": [
+            "// ${1|GET,POST,DELETE,PUT,PATCH|}",
+            "case actions[`${1|GET,POST,DELETE,PUT,PATCH|}_\\${ACTION}`]:",
+            "\treturn {",
+            "\t\t...state,",
+			"\t\terrmsg: '',",
+            "\t\tisFetching: true,",
+            "\t}",
+            "case actions[`${1|GET,POST,DELETE,PUT,PATCH|}_\\${ACTION}_SUCC`]:",
+            "\treturn {",
+            "\t\t...state,",
+            "\t\tdata: action.data,",
+            "\t\tisFetching: false,",
+            "\t}",
+            "case actions[`${1|GET,POST,DELETE,PUT,PATCH|}_\\${ACTION}_FAIL`]:",
+            "\treturn {",
+            "\t\t...state,",
+            "\t\terrmsg: action.errmsg,",
+            "\t\tdata: action.data || init.data,",
+            "\t\tisFetching: false,",
+            "\t}",
+            "$0"
+		],
+		"description": "Define API Reducer Case With Multiple Method"
+	},
+	"API Saga": {
+		"scope": "javascript,typescript",
+		"prefix": "apisaga",
+		"body": [
+			"yield takeLatest(actions.${1:ACTION_NAME}, (action) => commonWorker(action, ${2:api.function}$0))",
+		],
+		"description": "Define API Saga"
+	},
+	"API Custom Worker Saga": {
+		"scope": "javascript,typescript",
+		"prefix": "apicwsaga",
+		"body": [
+			"yield takeLatest(actions.${1:ACTION_NAME}, ${2:api.function}$0)",
+		],
+		"description": "Define API Custom Worker Saga"
+	},
+	"API Worker": {
+		"scope": "javascript,typescript",
+		"prefix": "apiworker",
+		"body": [
+			"export function* ${1:fnName}(action) {",
+			"\tconst actionType = action.type.toLowerCase()",
+			"\tconst res = yield call(${2:api}, action)",
+			"\tconst succ = actions[`${ actionType }_succ`]",
+			"\tconst fail = actions[`${ actionType }_fail`]",
+			"\tif (res.ok) {",
+			"\t\tyield put(succ(res.body))",
+			"\t\tyield put(actions.enqueue_snackbar({",
+			"\t\t\tmessage: `${3:succ_msg}`,",
+			"\t\t\tkey: new Date().getTime(),",
+			"\t\t\toptions: {",
+			"\t\t\t\tvariant: 'success'",
+			"\t\t\t}",
+			"\t\t}))",
+			"\t}",
+			"\telse {",
+			"\t\tyield put(fail(res.body))",
+			"\t\tyield put(actions.enqueue_snackbar({",
+			"\t\t\tmessage: `${4:errmsg}`,",
+			"\t\t\tkey: new Date().getTime(),",
+			"\t\t\toptions: {",
+			"\t\t\t\tvariant: 'error'",
+			"\t\t\t}",
+			"\t\t}))",
+			"\t}",
+			"}",
+			"$0"
+		],
+		"description": "Create Worker"
+	}
+}
